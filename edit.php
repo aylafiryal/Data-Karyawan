@@ -1,5 +1,6 @@
 <?php
 include "db_conn.php";
+$id = $_GET['id'];
 
 if(isset($_POST['submit'])) {
     $nama= $_POST['nama'];
@@ -9,12 +10,12 @@ if(isset($_POST['submit'])) {
     $posisi= $_POST['posisi'];
     $status= $_POST['status'];
 
-    $sql = "INSERT INTO `karyawan`(`id`, `name`, `email`, `address`, `gender`, `position`, `status`) VALUES ('','$nama','$email','$alamat','$jenisKelamin','$posisi','$status')";
+    $sql = "UPDATE `karyawan` SET `name`='$nama',`email`='$email',`address`='$alamat',`gender`='$jenisKelamin',`position`='$posisi',`status`='$status' WHERE id=$id";
 
     $result = mysqli_query($conn, $sql);
 
     if($result){
-        header("Location: index.php?msg=Berhasil ditambah!");
+        header("Location: index.php?msg=Berhasil diperbarui!");
     } else {
         echo "Failed: " . mysqli_error($conn);
     }
@@ -51,7 +52,6 @@ if(isset($_POST['submit'])) {
         </div>
         
         <?php
-        $id = $_GET['id'];
         $sql = "SELECT * FROM `karyawan` WHERE id = $id LIMIT 1";
         $result = mysqli_query($conn, $sql);
         $row = mysqli_fetch_assoc($result);
@@ -85,12 +85,12 @@ if(isset($_POST['submit'])) {
                 <div class="form-group mb-3">
                     <label class="form-label">Status:</label>
                     <select class="form-select" placeholder="Pilih status bekerja" name="status">
-                        <option value="fulltime">Full-time</option>
-                        <option value="parttime">Part-time</option>
+                        <option <?php echo ($row['status']=='fulltime')?"selected":"";?> value="fulltime">Full-time</option>
+                        <option <?php echo ($row['status']=='parttime')?"selected":"";?> value="parttime">Part-time</option>
                     </select>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-success" name="submit">Simpan</button>
+                    <button type="submit" class="btn btn-success" name="submit">Perbarui</button>
                     <a href="index.php" class="btn btn-danger">Batal</a>
                 </div>
             </form>
